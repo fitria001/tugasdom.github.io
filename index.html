@@ -3,109 +3,55 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pembagi Kelompok Otomatis</title>
+    <title>Penghitung Kata dan Karakter</title>
     <style>
-        
-        body { font-family: sans-serif; }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
+     
+        body {
+            padding: 20px;
         }
-        th, td {
-            border: 1px solid rgb(31, 40, 211);
-            padding: 8px;
-            text-align: center;
-            vertical-align: top;
+        textarea {
+            width: 95%;
+            height: 150px;
+            margin-top: 10px;
+            font-size: 1em;
         }
-        th {
-            background-color: #852121;
-        }
-        
-        tr.body-row {
-            margin-bottom: 10px;
+        #info-area {
+            margin-top: 15px;
+            font-weight: bold;
         }
     </style>
 </head>
 <body>
 
-    <h1>Pembagi Kelompok</h1>
+    <h1>Penghitung Kata dan Karakter</h1>
+    <p>Ketik apa saja di dalam kotak di bawah ini</p>
 
-    <form id="form-pembagi">
-        <h3>Masukkan Nama Anggota</h3>
-        <textarea id="input-nama" rows="6" cols="50" placeholder="Contoh: Budi, Ani, Candra, Dedi (pisahkan dengan koma)"></textarea>
+    <textarea id="area-teks" placeholder="Mulai mengetik di sini..."></textarea>
 
-        <h3>Tentukan Jumlah Kelompok</h3>
-        <label for="input-jumlah-kelompok">Bagi menjadi:</label>
-        <input type="number" id="input-jumlah-kelompok" min="1" value="3">
-        <label for="input-jumlah-kelompok">kelompok</label>
-        
-        <br><br>
-        <button type="submit">Bagi Kelompok!</button>
-    </form>
-
-    <hr>
-    <h2>Hasil Pembagian:</h2>
-    <div id="hasil-kelompok">
-        <p>Hasil akan ditampilkan di sini.</p>
+    <div id="info-area">
+        <p>Jumlah Karakter: <span id="info-karakter">0</span></p>
+        <p>Jumlah Kata: <span id="info-kata">0</span></p>
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const form = document.getElementById('form-pembagi');
-            const inputNama = document.getElementById('input-nama');
-            const inputJumlahKelompok = document.getElementById('input-jumlah-kelompok');
-            const hasilDiv = document.getElementById('hasil-kelompok');
+      
+        const areaTeks = document.getElementById('area-teks');
+        const infoKarakter = document.getElementById('info-karakter');
+        const infoKata = document.getElementById('info-kata');
 
-            form.addEventListener('submit', function(event) {
-                event.preventDefault();
-
-                const semuaNama = inputNama.value
-                    .split(',')
-                    .map(nama => nama.trim())
-                    .filter(nama => nama); 
-
-                if (semuaNama.length === 0) {
-                    hasilDiv.innerHTML = '<p style="color:red;">Masukkan nama terlebih dahulu!</p>';
-                    return;
-                }
-
-                const namaAcak = semuaNama.sort(() => Math.random() - 0.5);
-                const jumlahKelompok = parseInt(inputJumlahKelompok.value) || 1;
-                
-                let kelompokFinal = Array.from({ length: jumlahKelompok }, () => []);
-
-                namaAcak.forEach((nama, index) => {
-                    kelompokFinal[index % jumlahKelompok].push(nama);
-                });
-
-                
-                hasilDiv.innerHTML = ''; 
-                const table = document.createElement('table');
-                const maxColumns = 5;
-
-                
-                for (let i = 0; i < kelompokFinal.length; i += maxColumns) {
-                    const chunk = kelompokFinal.slice(i, i + maxColumns);
-
-                    const headerRow = table.insertRow(); 
-                    const bodyRow = table.insertRow();   
-                    bodyRow.className = 'body-row';
-
-                    
-                    chunk.forEach((grup, indexInChunk) => {
-                        const th = document.createElement('th');
-                        th.textContent = `Kelompok ${i + indexInChunk + 1}`;
-                        headerRow.appendChild(th);
-
-                        const td = document.createElement('td');
-                        td.innerHTML = grup.join('<br>');
-                        bodyRow.appendChild(td);
-                    });
-                }
-                
-                hasilDiv.appendChild(table);
-            });
+        areaTeks.addEventListener('input', function() {
+         
+            const teks = areaTeks.value;
+          
+            infoKarakter.textContent = teks.length;
+            
+            const teksRapi = teks.trim();
+            if (teksRapi === '') {
+                infoKata.textContent = 0;
+            } else {
+            
+                infoKata.textContent = teksRapi.split(/\s+/).length;
+            }
         });
     </script>
 
